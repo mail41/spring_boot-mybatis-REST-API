@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration scan="true" scanPeriod="60 seconds"><!--60초마다 파일의 변경을 확인하여 변경시 갱신 --> 
+
+    <Properties>
+        <Property name="LOG_FORMAT">%d{yyyy-MM-dd HH:mm:ss}[%thread] [%logger{0}:%line] %p %m%n</Property><!-- log 출력 포맷 -->  
+        <Property name="DIR">/Users/hyyun/Documents/user</Property><!-- log file 경로  -->  
+    </Properties>
+    
+    <!-- console 창 log  -->  
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_FORMAT}"/>
+        </Console>
+        
+        <!-- file 경로 및 이름  -->  
+        <RollingFile name="File"
+                     fileName="${DIR}/userProfile.log"
+                     filePattern="${DIR}/userProfile.%d{yyyy-MM-dd}_%i.log">
+            <PatternLayout pattern="${LOG_FORMAT}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+            </Policies>
+            <DefaultRolloverStrategy><!-- 30일지나면 삭제  -->  
+                <Delete basePath="${DIR}">
+                    <IfFileName glob="*.log" />
+                    <IfLastModified age="30d" />   
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+     	<!-- root 레벨 설정  -->  
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File" />
+        </Root>
+    </Loggers>
+</Configuration>
